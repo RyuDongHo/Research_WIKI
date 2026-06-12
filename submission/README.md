@@ -59,7 +59,7 @@ Prompts:
 
 서버는 LLM API를 호출하지 않습니다. 논문 요약, 아이디어 추출, claim 적합성 검토, novelty 검토는 연결된 Codex 또는 Claude Code가 수행하고 결과를 MCP로 저장합니다.
 
-연결된 에이전트의 역할, 권한, 허용/금지 기능은 [AGENT-SPEC.md](./AGENT-SPEC.md)에 정리되어 있습니다. 핵심 규칙: 에이전트 쓰기는 항상 `draft`로 저장되고, `reviewed` 승격은 연구자만 수행합니다.
+연결된 에이전트의 역할, 권한, 허용/금지 기능은 [PRD.md? Appendix: Wiki Agent SPEC](./PRD.md)에 정리되어 있습니다. 핵심 규칙: 에이전트 쓰기는 항상 `draft`로 저장되고, `reviewed` 승격은 연구자만 수행합니다.
 
 ## MCP capability 관리
 
