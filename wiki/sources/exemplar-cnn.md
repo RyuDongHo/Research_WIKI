@@ -2,9 +2,9 @@
 type: "source"
 slug: "exemplar-cnn"
 title: "Discriminative Unsupervised Feature Learning with Exemplar Convolutional Neural Networks"
-status: "draft"
-modified_at: "2026-06-02T04:41:11.125762+00:00"
-author: "Codex"
+status: "reviewed"
+modified_at: "2026-06-12T17:08:22.245062+00:00"
+author: "lab-member"
 language: "ko"
 confidence: "high"
 sources:
