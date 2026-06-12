@@ -2,9 +2,9 @@
 type: "concept"
 slug: "instance-discrimination"
 title: "Instance Discrimination"
-status: "draft"
-modified_at: "2026-06-01T15:11:24.047673+00:00"
-author: "Codex"
+status: "reviewed"
+modified_at: "2026-06-12T17:08:23.149094+00:00"
+author: "lab-member"
 language: "ko"
 confidence: "high"
 sources:
