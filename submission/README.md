@@ -2,7 +2,7 @@
 
 연구실 구성원이 함께 편집할 수 있는 로컬 연구 WIKI입니다. Canonical 지식은 Git으로 관리되는 Markdown 파일이며, Codex와 Claude Code는 MCP를 통해 논문을 읽고 `source`, `concept`, `comparison`, `claim`, `question` 페이지를 저장합니다.
 
-구현 목표와 경계는 [PRD.md](./PRD.md), 상세 클라이언트 연결 방법은 [docs/client-setup.md](./docs/client-setup.md)를 참고하세요.
+구현 목표와 경계는 [PRD.md](./PRD.md), 상세 클라이언트 연결 방법은 프로젝트 저장소의 `docs/client-setup.md`를 참고하세요.
 
 ## 주요 기능
 
@@ -59,7 +59,7 @@ Prompts:
 
 서버는 LLM API를 호출하지 않습니다. 논문 요약, 아이디어 추출, claim 적합성 검토, novelty 검토는 연결된 Codex 또는 Claude Code가 수행하고 결과를 MCP로 저장합니다.
 
-연결된 에이전트의 역할, 권한, 허용/금지 기능은 [specs/agent-spec.md](./specs/agent-spec.md)에 정리되어 있습니다. 핵심 규칙: 에이전트 쓰기는 항상 `draft`로 저장되고, `reviewed` 승격은 연구자만 수행합니다.
+연결된 에이전트의 역할, 권한, 허용/금지 기능은 [AGENT-SPEC.md](./AGENT-SPEC.md)에 정리되어 있습니다. 핵심 규칙: 에이전트 쓰기는 항상 `draft`로 저장되고, `reviewed` 승격은 연구자만 수행합니다.
 
 ## MCP capability 관리
 
@@ -124,7 +124,7 @@ codex mcp list
 
 ## Claude Code 연결
 
-프로젝트에는 공유 가능한 [.mcp.json](./.mcp.json)이 포함되어 있습니다. 각 구성원은 패키지를 설치한 뒤 이 프로젝트에서 Claude Code를 실행하고 프로젝트 MCP 서버 사용을 승인하면 됩니다.
+프로젝트에는 공유 가능한 프로젝트 저장소의 `.mcp.json`이 포함되어 있습니다. 각 구성원은 패키지를 설치한 뒤 이 프로젝트에서 Claude Code를 실행하고 프로젝트 MCP 서버 사용을 승인하면 됩니다.
 
 직접 다시 등록하려면:
 
@@ -133,7 +133,7 @@ claude mcp add --transport stdio --scope project research-wiki -- research-wiki-
 claude mcp list
 ```
 
-HTTP 연결과 토큰 환경 변수 사용 방법은 [docs/client-setup.md](./docs/client-setup.md)에 정리했습니다.
+HTTP 연결과 토큰 환경 변수 사용 방법은 프로젝트 저장소의 `docs/client-setup.md`에 정리했습니다.
 
 ## 검증
 
