@@ -398,6 +398,17 @@
     .mcp-switch { display: flex; align-items: center; justify-content: flex-end; gap: 6px; color: #56708c; font-size: 11px; }
     .mcp-switch input { width: auto; margin: 0; }
     .mcp-save-row { display: flex; align-items: center; gap: 10px; padding: 0 16px 16px; }
+    .guide-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 16px; }
+    .guide-step { padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: #fbfdff; }
+    .guide-step .num { display: inline-grid; place-items: center; width: 24px; height: 24px; margin-bottom: 9px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 12px; font-weight: 800; }
+    .guide-step h3 { margin: 0 0 6px; color: #27496e; font-size: 13px; }
+    .guide-step p { margin: 0; color: var(--muted); font-size: 11.5px; line-height: 1.65; }
+    .guide-step code { padding: 1px 5px; border-radius: 4px; background: #eef3f8; font-size: 11px; }
+    .guide-foot { padding: 0 16px 15px; color: var(--muted); font-size: 11px; line-height: 1.6; }
+    .hint { margin: 6px 0 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .step-label { display: flex; align-items: center; gap: 7px; margin: 20px 0 4px; color: #27496e; font-size: 12px; font-weight: 800; }
+    .step-label .num { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 11px; }
+    select:disabled { color: #7c8a99; background: #edf2f7; cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -426,11 +437,37 @@
           <p class="subtitle" id="workspaceSubtitle">논문 반영 상태를 확인하고 WIKI 초안을 함께 다듬습니다.</p>
         </div>
         <div class="actions">
+          <button class="btn" id="guideToggle" type="button">사용법</button>
           <button class="btn" id="rebuildButton">인덱스 다시 만들기</button>
           <button class="btn primary" id="newPageButton">새 WIKI 페이지</button>
           <button class="btn" id="workbenchToggle" type="button" aria-expanded="true">작업 패널 닫기</button>
         </div>
       </header>
+
+      <section class="section guide" id="guideSection">
+        <div class="section-head">
+          <h2>이렇게 사용하세요</h2>
+          <button class="btn" id="guideClose" type="button">접기</button>
+        </div>
+        <div class="guide-steps">
+          <div class="guide-step">
+            <span class="num">1</span>
+            <h3>자료 넣기</h3>
+            <p>정리할 PDF를 <code>raw/papers</code> 폴더에 넣습니다. 아래 <b>논문 보관함</b>에 <b style="color:var(--red)">빨간 카드</b>(아직 안 읽음)로 나타납니다.</p>
+          </div>
+          <div class="guide-step">
+            <span class="num">2</span>
+            <h3>WIKI 페이지로 만들기</h3>
+            <p>빨간 카드를 누르면 오른쪽 <b>PDF 읽기</b> 패널이 열립니다. <b>①내용 불러오기 → ②source 페이지 만들기</b> 순서로 진행합니다. 또는 Claude Code·Codex에게 “이 PDF 위키로 정리해줘”라고 요청해도 됩니다.</p>
+          </div>
+          <div class="guide-step">
+            <span class="num">3</span>
+            <h3>확인하고 검토</h3>
+            <p><b>WIKI 페이지</b>에서 만들어진 글을 읽습니다. AI·자동 생성 글은 <b style="color:#a65e16">draft(초안)</b> 상태이고, 내용을 확인한 사람이 <b>검토 완료로 표시</b>를 누르면 <b style="color:#20775f">reviewed</b>가 됩니다.</p>
+          </div>
+        </div>
+        <p class="guide-foot">색 의미 — <i class="dot red"></i>빨강: 아직 위키에 없음 · <i class="dot amber"></i>주황: source 초안만 등록됨 · <i class="dot blue"></i>파랑: source와 concept까지 정리 완료.</p>
+      </section>
 
       <section class="stats" id="summaryStats">
         <div class="stat"><span class="stat-label">로컬 PDF</span><strong class="stat-value" id="statPapers">0</strong></div>
@@ -512,6 +549,7 @@
             <label>언어<select id="pageLanguage"><option value="ko">한국어</option><option value="en">English</option></select></label>
           </div>
           <label class="field">슬러그<input id="pageSlug" required placeholder="예: visibility-guidance"></label>
+          <p class="hint" id="editIdentityNote" hidden>유형과 슬러그는 이 페이지의 고정 주소입니다. 변경할 수 없습니다. 다른 유형으로 만들려면 위의 <b>새 WIKI 페이지</b>를 사용하세요.</p>
           <label class="field">제목<input id="pageTitle" required placeholder="페이지 제목"></label>
           <input id="pageStatus" type="hidden" value="draft">
           <label class="field">신뢰도<select id="pageConfidence"><option value="low">low</option><option value="medium">medium</option><option value="high">high</option></select></label>
@@ -523,7 +561,7 @@
             <label>Git 이메일<input id="pageEmail" value="lab@example.local" required></label>
           </div>
           <div class="button-row">
-            <button class="btn primary" type="submit">저장</button>
+            <button class="btn primary" id="editSubmit" type="submit">저장</button>
             <button class="btn review" type="button" id="reviewButton">검토 완료로 표시</button>
           </div>
         </form>
@@ -531,7 +569,9 @@
       </section>
 
       <section class="panel" id="ingestPanel">
+        <p class="hint">PDF를 읽어 WIKI <b>source 페이지(초안)</b>를 만드는 곳입니다. 아래 ① → ② 순서로 진행하세요.</p>
         <form id="ingestForm">
+          <div class="step-label"><span class="num">1</span>PDF 내용 불러오기</div>
           <label>로컬 PDF 경로<input id="pdfPath" required placeholder="C:\papers\paper.pdf"></label>
           <div class="form-grid field">
             <label>읽기 방식<select id="readingMode"><option value="text">텍스트 추출</option><option value="screenshot">이미지 + 텍스트</option></select></label>
@@ -548,24 +588,24 @@
             <label>페이지 범위<input id="pdfPages" disabled placeholder="범위 선택 시 예: 1-3,5"></label>
             <label>DPI<input id="pdfDpi" type="number" value="144" min="72" max="300"></label>
           </div>
-          <div class="button-row"><button class="btn primary" type="submit">PDF 미리 읽기</button></div>
+          <div class="button-row"><button class="btn primary" type="submit">① PDF 내용 불러오기</button></div>
         </form>
-        <div class="notice">추출 원문은 PDF 언어를 유지합니다. 선택 언어는 이후 Codex 또는 Claude Code가 WIKI 내용을 정리할 때 사용합니다.</div>
+        <div class="notice">불러온 원문은 PDF 원래 언어 그대로입니다. 한국어/영어 정리는 이후 단계에서 Codex·Claude Code가 수행합니다.</div>
         <section class="register-box" id="sourceRegisterBox" hidden>
-          <h3>WIKI source 초안 등록</h3>
-          <p>추출한 원문을 Markdown source 페이지로 저장합니다. 이후 Codex 또는 Claude Code가 내용을 다듬고 concept 페이지를 추가할 수 있습니다.</p>
-          <label class="field">source 제목<input id="sourceRegisterTitle" placeholder="논문 제목"></label>
-          <label class="field">source 슬러그<input id="sourceRegisterSlug" placeholder="예: exemplar-cnn"></label>
-          <div class="button-row"><button class="btn primary" id="sourceRegisterButton" type="button">source 초안 등록</button></div>
-          <div class="notice" id="sourceRegisterNotice">미리 읽기를 실행하면 등록할 수 있습니다.</div>
+          <div class="step-label"><span class="num">2</span>이 내용으로 WIKI source 페이지 만들기</div>
+          <p>불러온 원문을 그대로 담은 <b>source 초안(draft) 페이지</b>를 만듭니다. 만든 뒤 내용을 다듬거나 concept 페이지를 추가하는 일은 AI 에이전트(Codex·Claude Code)가 이어서 합니다.</p>
+          <label class="field">페이지 제목<input id="sourceRegisterTitle" placeholder="논문 제목"></label>
+          <label class="field">페이지 슬러그(주소)<input id="sourceRegisterSlug" placeholder="예: exemplar-cnn"></label>
+          <div class="button-row"><button class="btn primary" id="sourceRegisterButton" type="button">② source 페이지 만들기</button></div>
+          <div class="notice" id="sourceRegisterNotice">①을 실행하면 여기서 페이지를 만들 수 있습니다.</div>
         </section>
-        <div class="preview" id="pdfPreview"><div class="empty">아직 읽은 PDF가 없습니다.</div></div>
+        <div class="preview" id="pdfPreview"><div class="empty">아직 불러온 PDF가 없습니다. 위 ①을 실행하면 원문 미리보기가 여기에 표시됩니다.</div></div>
       </section>
     </aside>
   </main>
 
   <script>
-    const state = { pages: [], papers: [], pageTypes: [], pageTypeFilter: "", paperFilter: "", selected: null, pdfRangeMode: "all", pdfPreview: null, mcpStatus: null };
+    const state = { pages: [], papers: [], pageTypes: [], pageTypeFilter: "", paperFilter: "", selected: null, pdfRangeMode: "all", pdfPreview: null, mcpStatus: null, guideHidden: false, editMode: "new" };
     const $ = (id) => document.getElementById(id);
     const splitList = (value) => value.split(",").map((item) => item.trim()).filter(Boolean);
 
@@ -700,12 +740,23 @@
       $("pageTags").value = page.tags.join(", ");
       $("pageBody").value = page.body;
       $("pageAuthor").value = page.author;
-      setNotice(`${page.title} 페이지를 편집기에 불러왔습니다.`);
+      setEditMode("existing");
+      setNotice(`${page.page_type}/${page.slug} 페이지를 편집기에 불러왔습니다. 내용을 고치고 '변경 저장'을 누르세요.`);
+    }
+
+    function setEditMode(mode) {
+      state.editMode = mode;
+      const existing = mode === "existing";
+      $("pageType").disabled = existing;
+      $("pageSlug").disabled = existing;
+      $("editIdentityNote").hidden = !existing;
+      $("editSubmit").textContent = existing ? "변경 저장" : "새 페이지 만들기";
     }
 
     function showPageDetail(page) {
       $("workspaceTitle").textContent = "WIKI 상세";
       $("workspaceSubtitle").textContent = "등록된 Markdown 본문을 읽고 필요할 때 편집 패널을 여세요.";
+      $("guideSection").hidden = true;
       $("summaryStats").hidden = true;
       $("paperSection").hidden = true;
       $("pageSection").hidden = true;
@@ -820,7 +871,8 @@
       $("pageConfidence").value = "low";
       $("pageAuthor").value = "lab-member";
       $("pageEmail").value = "lab@example.local";
-      setNotice("새 WIKI 페이지 초안을 작성합니다.");
+      setEditMode("new");
+      setNotice("새 WIKI 페이지를 작성합니다. 유형과 슬러그(주소)를 정한 뒤 본문을 적고 '새 페이지 만들기'를 누르세요.");
       openTab("edit");
     }
 
@@ -866,6 +918,7 @@
       const [title, subtitle] = views[name];
       $("workspaceTitle").textContent = title;
       $("workspaceSubtitle").textContent = subtitle;
+      $("guideSection").hidden = name !== "dashboard" || state.guideHidden;
       $("summaryStats").hidden = name !== "dashboard";
       $("paperSection").hidden = name === "pages" || name === "mcp";
       $("pageSection").hidden = name === "papers" || name === "mcp";
@@ -1001,6 +1054,15 @@
       setWorkbenchOpen(true);
       resetPage();
     });
+    $("guideClose").addEventListener("click", () => {
+      state.guideHidden = true;
+      $("guideSection").hidden = true;
+    });
+    $("guideToggle").addEventListener("click", () => {
+      state.guideHidden = false;
+      setActiveNav(document.querySelector('[data-nav-view="dashboard"]'));
+      setWorkspaceView("dashboard");
+    });
     $("workbenchToggle").addEventListener("click", () => setWorkbenchOpen(document.querySelector(".shell").classList.contains("workbench-closed")));
     $("workbenchClose").addEventListener("click", () => setWorkbenchOpen(false));
     $("pageDetailBack").addEventListener("click", () => setWorkspaceView("pages"));
@@ -1028,6 +1090,7 @@
       if (button.dataset.navView === "mcp") loadMcpStatus().catch((error) => setNotice(error.message, true));
     }));
 
+    setEditMode("new");
     Promise.all([loadDashboard(), loadMcpStatus()]).catch((error) => setNotice(error.message, true));
   </script>
 </body>
