@@ -21,7 +21,7 @@ research-wiki-mcp = "research_wiki_mcp.server:main"
 research-wiki-gui = "research_wiki_mcp.gui:main"
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["tools"]
 
 [tool.setuptools.package-data]
 research_wiki_mcp = ["gui_assets/*.html"]

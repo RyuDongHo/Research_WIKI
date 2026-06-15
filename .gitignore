@@ -12,8 +12,13 @@ build/
 data/*.sqlite3
 .env
 
+# Local-only Claude Code settings (permissions). Shared settings.json is tracked.
+.claude/settings.local.json
+
 # Generated PDF artifacts.
 raw/screenshots/
 
-# Local paper inputs. Keep only the directory placeholder in Git.
+# Local paper inputs. Keep only the directory placeholder and the bundled
+# walkthrough sample in Git; users' own PDFs stay local.
 raw/papers/*.pdf
+!raw/papers/sample-note.pdf

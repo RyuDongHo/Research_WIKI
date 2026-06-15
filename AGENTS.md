@@ -5,11 +5,16 @@
 
 ## 0. Structure
 
-- `specs/` - agreed requirements and acceptance criteria.
+- `RULES.md` - quick operating-rules summary; read after this file.
+- `specs/` - agreed requirements, acceptance criteria, and `agent-spec.md` (agent roles/permissions).
 - `specs/discussion-rounds.md` - append-only planning discussion record.
 - `TASK.md` - ordered checklist; work on only the top unfinished item.
 - `journal.md` - append-only local work log.
 - `harness/` - contract, procedure, validation, and preferences.
+- `.claude/skills/wiki-ingest/` - the material→wiki ingest skill agents follow.
+- `.claude/settings.json` + `scripts/session_context_hook.py` - SessionStart hook injecting rules.
+- `tools/research_wiki_mcp/` - the MCP server and local viewer GUI.
+- `wiki/` - canonical Markdown wiki; `wiki/system/page-schema.md` is the schema.
 - `AGENTS.md` - this file.
 
 ## 1. Planning Gate

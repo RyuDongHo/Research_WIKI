@@ -30,3 +30,6 @@ Planning is closed. Implement exactly one topmost unfinished item per loop.
 - [x] Add GUI MCP status navigation, capability visibility, and startup-time enable or disable controls.
 - [x] Add Git-managed WIKI image attachments for PDF screenshots, expose MCP publishing, and render attached images in the GUI.
 - [x] Add proactive discussion capture through MCP and improve WIKI browsing with page-type, paper, and expanded-list views.
+
+## Productization
+- [x] Consolidate into one runnable clone-and-go product: tools/ MCP server + viewer, harness with RULES.md + skill + hook, ready-to-use wiki, bundled sample, demo/ screenshot, 30-minute README, and submission/ cleanup.

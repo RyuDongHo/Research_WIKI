@@ -1,4 +1,4 @@
-# Research MCP WIKI Tool Validation
+﻿# Research MCP WIKI Tool Validation
 
 ## Planning Gates
 
@@ -33,9 +33,9 @@ Test-Path .\specs\plan-closed.md
 Current foundation checks:
 
 ```powershell
-$env:PYTHONPATH = "src"
+$env:PYTHONPATH = "tools"
 python -m unittest discover -s tests -v
-python -m compileall -q src tests
+python -m compileall -q tools tests
 ```
 
 PDF extraction checks are included in the unittest suite. Screenshot tests run when PyMuPDF is available.
@@ -87,7 +87,7 @@ python -m json.tool .mcp.json
 Current index rebuild smoke check:
 
 ```powershell
-$env:PYTHONPATH = "src"
+$env:PYTHONPATH = "tools"
 @'
 from research_wiki_mcp import AppConfig, WikiIndex
 index = WikiIndex(AppConfig.from_root("."))
